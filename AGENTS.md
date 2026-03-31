@@ -6,6 +6,7 @@
 - **Workflow:** Push back immediately if a prompt or architecture lacks rigor. Acknowledge mistakes instantly; correct them without defensive explanations.
 - **Code Output:** Output refactored, idiomatic code as the primary response. Do not use placeholders (`...`) unless explicitly instructed.
 - **Verification:** Always prioritize evidence-based reasoning. If in an agentic loop, verify code via tests/compilation before declaring a task complete.
+- **Pull Requests:** Always create PRs as **drafts** (`--draft` flag). Never create a non-draft PR unless the user explicitly requests it.
 
 ---
 
@@ -25,50 +26,92 @@ All architectural constraints and language specifications below still apply as *
 
 Activated by running `/production`. Once active, the following workflow is **MANDATORY** for all feature/implementation work. Every phase is a gate — do not skip phases or reorder them.
 
+**Core principle: Build first, split later.** You cannot decompose a feature into good PRs until the complete implementation exists and is verified. Splitting blind produces arbitrary boundaries. Build the whole thing, get it working, review it — *then* carve it into clean, reviewable PRs.
+
 **Session continuity:** On entering Production mode, check if `DELIVERY_PLAN.md` exists in the workspace root. If it does, read it immediately — it contains the current delivery state from a previous session. Resume from where it left off. When all PRs are delivered and the user has approved the final result, delete `DELIVERY_PLAN.md`.
+
+#### Orchestrator model
+
+The main agent is a **pure orchestrator**. It manages `DELIVERY_PLAN.md`, dispatches subagents, enforces gates, and communicates with the user. It **NEVER**:
+- Writes, edits, or deletes source files directly
+- Runs `make`, `go test`, or any build/lint commands directly
+- Skips a phase or reorders phases
+
+All implementation and verification work is done by subagents via the Task tool.
+
+#### Phases
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ Phase 1: PLAN                                               │
+│   Agent: Orchestrator                                       │
 │   Understand the requirement. Research the codebase.        │
 │   Ask clarifying questions. Produce a clear description     │
 │   of what needs to be built and why.                        │
+│   ── Gate: User confirms understanding ──                   │
 ├─────────────────────────────────────────────────────────────┤
-│ Phase 2: ARCHITECT                                          │
-│   Invoke @architect to decompose the plan into small,       │
-│   reviewable PRs (refactoring principle: small changes).    │
-│   Output: DELIVERY_PLAN.md                                  │
-│   ── STOP: Await user approval of the plan ──               │
+│ Phase 2: BASELINE                                           │
+│   Agent: @general (Task tool)                               │
+│   Run build/test and report current health.                 │
+│   ── Gate: Build passes clean ──                            │
 ├─────────────────────────────────────────────────────────────┤
-│ Phase 3: BUILD (one PR at a time)                           │
-│   a. Run test suite to establish baseline (/start)          │
-│   b. Implement ONE PR from DELIVERY_PLAN.md                 │
-│   c. TDD (/tdd) is encouraged but not mandatory             │
-│   d. Verify: if a Makefile exists, run `make` (no args);    │
-│      otherwise run the language test suite directly          │
+│ Phase 3: BUILD                                              │
+│   Agent: @general (Task tool)                               │
+│   Implement the COMPLETE feature on a single branch.        │
+│   Get everything working end-to-end. Run tests as you go.   │
+│   ── Gate: Agent reports done, tests pass ──                │
 ├─────────────────────────────────────────────────────────────┤
-│ Phase 4: REVIEW                                             │
-│   Run /review — @reviewer checks code against:              │
+│ Phase 4: VERIFY                                             │
+│   Agent: @general (Task tool)                               │
+│   Run full build + lint + all tests.                        │
+│   Report pass/fail.                                         │
+│   ── Gate: Build passes clean ──                            │
+│   If FAIL → dispatch @general to fix, then re-run VERIFY.   │
+├─────────────────────────────────────────────────────────────┤
+│ Phase 5: REVIEW                                             │
+│   Agent: @reviewer (Task tool)                              │
+│   Code review the complete feature against:                 │
 │     • Global standards (SOLID, KISS, YAGNI)                 │
 │     • Language-specific rules                               │
-│     • Per-PR quality checklist                              │
-│   Fix ALL BLOCK findings before proceeding.                 │
+│     • Quality checklist                                     │
+│   ── Gate: Zero BLOCKs ──                                   │
+│   If BLOCKs → dispatch @general to fix, re-run VERIFY       │
+│   + REVIEW.                                                 │
 ├─────────────────────────────────────────────────────────────┤
-│ Phase 5: STOP — MANUAL VERIFICATION                         │
-│   Present a summary of all changes to the user.             │
+│ Phase 6: STOP — MANUAL VERIFICATION                         │
+│   Agent: Orchestrator                                       │
+│   Present a summary of ALL changes to the user.             │
 │   List every file modified or created.                      │
 │   DO NOT COMMIT. DO NOT RUN GIT ADD/COMMIT/PUSH.            │
-│   The user reviews, verifies, and commits manually.         │
+│   The user tests/inspects the complete feature.             │
+│   ── Gate: User confirms the feature is correct ──          │
 ├─────────────────────────────────────────────────────────────┤
-│ REPEAT Phases 3-5 for each PR in DELIVERY_PLAN.md           │
+│ Phase 7: ARCHITECT (split into PRs)                         │
+│   Agent: @architect (Task tool)                             │
+│   NOW that the full implementation exists and is verified,  │
+│   decompose it into small, reviewable PRs with logical      │
+│   boundaries. Each PR must build and pass tests on its own. │
+│   Output: DELIVERY_PLAN.md                                  │
+│   ── Gate: User approves the PR split ──                    │
 ├─────────────────────────────────────────────────────────────┤
-│ STOP — Architecture complete. All PRs delivered.            │
+│ Phase 8: DELIVER                                            │
+│   Agent: @general (Task tool)                               │
+│   FOR EACH PR in DELIVERY_PLAN.md:                          │
+│     • Create branch, cherry-pick/stage the relevant changes │
+│     • Run build + tests to confirm it stands alone          │
+│     • Create draft PR                                       │
+│   Report all PR URLs to user.                               │
+│   ── Gate: User approves PRs ──                             │
+├─────────────────────────────────────────────────────────────┤
+│ DONE — Feature complete. All PRs delivered.                 │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ### Production Mode — Phase violations
 
-- Skipping ARCHITECT and going straight to BUILD is **forbidden** for multi-step features.
+- The orchestrator writing code or running build commands directly is **forbidden**.
+- Splitting into PRs before the feature is fully built, verified, and reviewed is **forbidden**.
+- Skipping BASELINE, VERIFY, or REVIEW is **forbidden**.
 - Committing without user approval is **forbidden**. Always stop and wait.
 - Proceeding past a FAIL review verdict is **forbidden**. Fix all BLOCKs first.
 
@@ -79,9 +122,8 @@ Activated by running `/production`. Once active, the following workflow is **MAN
 | Command | Purpose | Mode |
 |---|---|---|
 | `/production` | Activate Production mode for the current session | Any |
-| `/start` | Run test suite, establish baseline health | Production (BUILD phase) |
 | `/tdd` | Red/Green TDD protocol (optional, encouraged) | Any |
-| `/next-pr` | Execute next PR from `DELIVERY_PLAN.md` — implements, reviews, then STOPs for manual commit | Production (BUILD → REVIEW → STOP) |
+| `/next-pr` | Execute next PR from `DELIVERY_PLAN.md` — dispatches BASELINE → BUILD → VERIFY → REVIEW → STOP | Production |
 | `/review` | Invoke `@reviewer` to check changes against all standards | Production (REVIEW phase) |
 
 ## Custom Agents
