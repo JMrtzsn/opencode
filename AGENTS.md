@@ -55,11 +55,16 @@ All implementation and verification work is done by subagents via the Task tool.
 │   Run build/test and report current health.                 │
 │   ── Gate: Build passes clean ──                            │
 ├─────────────────────────────────────────────────────────────┤
-│ Phase 3: BUILD                                              │
+│ Phase 3: BUILD (TDD MANDATORY)                              │
 │   Agent: @general (Task tool)                               │
-│   Implement the COMPLETE feature on a single branch.        │
-│   Get everything working end-to-end. Run tests as you go.   │
-│   ── Gate: Agent reports done, tests pass ──                │
+│   Implement the COMPLETE feature using strict TDD:          │
+│     1. RED — Write a failing test for the next behaviour.   │
+│     2. GREEN — Write the minimum code to pass the test.     │
+│     3. REFACTOR — Clean up while all tests stay green.      │
+│   Repeat until the feature is complete end-to-end.          │
+│   No production code may be written without a failing test  │
+│   first. Skipping TDD in this phase is a phase violation.   │
+│   ── Gate: Agent reports done, all tests pass ──            │
 ├─────────────────────────────────────────────────────────────┤
 │ Phase 4: VERIFY                                             │
 │   Agent: @general (Task tool)                               │
@@ -122,7 +127,7 @@ All implementation and verification work is done by subagents via the Task tool.
 | Command | Purpose | Mode |
 |---|---|---|
 | `/production` | Activate Production mode for the current session | Any |
-| `/tdd` | Red/Green TDD protocol (optional, encouraged) | Any |
+| `/tdd` | Red/Green TDD protocol (mandatory in Production BUILD phase) | Any |
 | `/next-pr` | Execute next PR from `DELIVERY_PLAN.md` — dispatches BASELINE → BUILD → VERIFY → REVIEW → STOP | Production |
 | `/review` | Invoke `@reviewer` to check changes against all standards | Production (REVIEW phase) |
 
