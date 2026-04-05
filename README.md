@@ -25,7 +25,7 @@ PLAN → BASELINE → BUILD (TDD) → VERIFY → REVIEW → STOP → ARCHITECT �
 | **REVIEW** | `@reviewer` checks against SOLID, KISS, YAGNI, language rules. Gate: zero BLOCKs. |
 | **STOP** | Present changes to user. No commits. Gate: user confirms. |
 | **ARCHITECT** | `@architect` splits the verified feature into small, reviewable PRs. Gate: user approves split. |
-| **DELIVER** | Create branches and draft PRs for each item in the delivery plan. |
+| **DELIVER** | Create a feature branch from main. Each PR branches off the feature branch and targets it via draft PR. Final draft PR merges the feature branch into main. |
 
 The main agent is a pure orchestrator — it never writes code or runs builds directly. All work is dispatched to subagents.
 

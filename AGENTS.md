@@ -101,10 +101,15 @@ All implementation and verification work is done by subagents via the Task tool.
 ├─────────────────────────────────────────────────────────────┤
 │ Phase 8: DELIVER                                            │
 │   Agent: @general (Task tool)                               │
-│   FOR EACH PR in DELIVERY_PLAN.md:                          │
-│     • Create branch, cherry-pick/stage the relevant changes │
-│     • Run build + tests to confirm it stands alone          │
-│     • Create draft PR                                       │
+│   Integration branch model:                                 │
+│     1. Create a feature branch (e.g. feature/xyz) from main │
+│     2. FOR EACH PR in DELIVERY_PLAN.md:                     │
+│        • Create a sub-branch off the feature branch         │
+│        • Cherry-pick/stage the relevant changes             │
+│        • Run build + tests to confirm it stands alone       │
+│        • Create draft PR targeting the feature branch       │
+│     3. After all sub-PRs are merged into the feature branch │
+│        create a final draft PR: feature branch → main       │
 │   Report all PR URLs to user.                               │
 │   ── Gate: User approves PRs ──                             │
 ├─────────────────────────────────────────────────────────────┤
