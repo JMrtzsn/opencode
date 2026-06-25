@@ -7,6 +7,9 @@
 - **Code Output:** Output refactored, idiomatic code as the primary response. Do not use placeholders (`...`) unless explicitly instructed.
 - **Verification:** Always prioritize evidence-based reasoning. If in an agentic loop, verify code via tests/compilation before declaring a task complete.
 - **Pull Requests:** Always create PRs as **drafts** (`--draft` flag). Never create a non-draft PR unless the user explicitly requests it.
+- **Commit/PR titles:** Use plain imperative sentences without conventional-commit prefixes. No `fix:`, `feat:`, `chore:`, etc. Examples: "Upgrade golang.org/x/crypto to v0.52.0", "Add new adapter", "Remove deprecated endpoint".
+- **PR/comment descriptions:** Keep them minimal. Do NOT auto-generate long PR bodies, walls of bullet points, or verbose review comments. Ask the user what the description should contain (or leave it near-empty) instead of writing it yourself.
+- **Formatting:** Always run the project's formatter (e.g. `prettier`, `gofmt`) before pushing or creating a PR. Code must pass formatting checks.
 
 ---
 
@@ -101,15 +104,14 @@ All implementation and verification work is done by subagents via the Task tool.
 ├─────────────────────────────────────────────────────────────┤
 │ Phase 8: DELIVER                                            │
 │   Agent: @general (Task tool)                               │
-│   Integration branch model:                                 │
+│   Short-lived branch strategy (MANDATORY — always used):    │
 │     1. Create a feature branch (e.g. feature/xyz) from main │
 │     2. FOR EACH PR in DELIVERY_PLAN.md:                     │
-│        • Create a sub-branch off the feature branch         │
+│        • Create a short-lived sub-branch off feature branch │
 │        • Cherry-pick/stage the relevant changes             │
 │        • Run build + tests to confirm it stands alone       │
 │        • Create draft PR targeting the feature branch       │
-│     3. After all sub-PRs are merged into the feature branch │
-│        create a final draft PR: feature branch → main       │
+│     3. ALL PRs target the feature branch, NEVER main.       │
 │   Report all PR URLs to user.                               │
 │   ── Gate: User approves PRs ──                             │
 ├─────────────────────────────────────────────────────────────┤
@@ -167,6 +169,7 @@ Rule 5 was previously stated by Fred Brooks in The Mythical Man-Month. Rule 5 is
 - **YAGNI:** Do not build features, abstractions, or flexibility that are not needed right now. Every line of code must justify its existence against a current requirement.
 - **Dependencies:** Standard library first. Require explicit justification before adding third-party dependencies.
 - **No TODOs in code:** Never leave `TODO`, `FIXME`, `HACK`, or similar placeholder comments in committed files. Resolve them before completing a task.
+- **Test naming:** Name tests for the behaviour under test, not for the implementation detail or unrelated mechanism they happen to contrast against. State what the code does, not what it isn't subject to. A reader should understand the assertion without prior knowledge of internal flags or gates. Prefer "renders banner in list response" over "serves banner regardless of FEATURE_FLAG"; prefer "returns 404 for unknown id" over "does not hit the gated path". Encode setup conditions (feature flags, gates) in the test body, not the name.
 
 ## Language Specifications
 

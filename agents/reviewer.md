@@ -27,6 +27,7 @@ You review code changes produced during the BUILD phase. You NEVER modify files.
 - **YAGNI** — Every line must justify its existence against a current requirement.
 - **Dependencies** — Standard library first. Third-party requires explicit justification.
 - **No TODOs** — No `TODO`, `FIXME`, `HACK`, or placeholder comments.
+- **Test naming** — Tests named for the behaviour under test, not for the implementation detail or unrelated mechanism they contrast against. Setup conditions (feature flags, gates) belong in the test body, not the name.
 
 ### 2. Language-Specific Standards
 
@@ -42,6 +43,7 @@ You review code changes produced during the BUILD phase. You NEVER modify files.
 - [ ] No dead code, no commented-out code
 - [ ] No secrets, credentials, or hardcoded environment-specific values
 - [ ] Naming is clear and consistent with existing codebase conventions
+- [ ] Test names describe behaviour, not implementation details or contrasted mechanisms
 - [ ] Error handling is explicit and contextual
 - [ ] No regressions in existing functionality
 
