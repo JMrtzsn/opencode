@@ -203,6 +203,35 @@ Rule 5 was previously stated by Fred Brooks in The Mythical Man-Month. Rule 5 is
 | Documentation is for users. | Write for the person consuming your package, not for yourself. |
 | Don't panic. | `panic` only for unrecoverable programmer errors (like index out of bounds). For everything else, return an `error`. |
 
+#### Project Layout (golang-standards/project-layout)
+
+Not an official Go-team standard; a community convention. **Do not scaffold all of these — a small project needs only `main.go` + `go.mod`.** Add directories as the project grows and only when they earn their place. Never introduce a `/src` directory (Java-ism).
+
+| Directory | Purpose |
+|---|---|
+| `/cmd` | Main applications. One subdir per binary, named after the executable (`/cmd/myapp`). Keep `main` tiny — wire up `/internal` and `/pkg`, nothing else. |
+| `/internal` | Private code the compiler forbids others from importing. Optionally split `/internal/app` (app code) and `/internal/pkg` (shared internal libs). Prefer this over `/pkg` for privacy. |
+| `/pkg` | Library code safe for external import. Only use when the root is cluttered or code is genuinely reusable; some in the community discourage it. |
+| `/vendor` | Vendored dependencies (`go mod vendor`). Don't commit for libraries. Often unnecessary with the module proxy. |
+| `/api` | OpenAPI/Swagger specs, JSON schema, protocol (`.proto`) definitions. |
+| `/web` | Web-specific assets: static files, server templates, SPA code. |
+| `/configs` | Config file templates and default configs (`confd`, `consul-template`). |
+| `/init` | System init (systemd, sysv) and process-supervisor configs. |
+| `/scripts` | Build, install, and analysis scripts to keep the Makefile thin. |
+| `/build` | Packaging (`/build/package`: Docker, deb, rpm) and CI (`/build/ci`) configs. |
+| `/deployments` | IaaS/PaaS/orchestration configs (docker-compose, k8s/helm, terraform). Sometimes `/deploy`. |
+| `/test` | External test apps and test data. Use `/test/testdata` (Go ignores `testdata`, `_*`, `.*`). |
+| `/docs` | Design and user docs beyond godoc. |
+| `/tools` | Supporting tools; may import from `/pkg` and `/internal`. |
+| `/examples` | Usage examples for the app or public libraries. |
+| `/third_party` | Forked code and external utilities (e.g. Swagger UI). |
+| `/githooks` | Git hooks. |
+| `/assets` | Repo assets (images, logos). |
+| `/website` | Project website data if not using GitHub Pages. |
+
+- Use Go Modules; the module path's first component conventionally contains a dot (`github.com/user/proj`).
+- Lint with `staticcheck` (golint is deprecated); format with `gofmt`.
+
 ### TypeScript
 - Strict mode mandatory. Strictly avoid `any`; use `unknown` and type guards. Use `import type`.
 - Prefer `interface` over `type` for public boundaries.
