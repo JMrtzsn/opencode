@@ -13,119 +13,119 @@
 
 ---
 
-## Workflow Modes
+## Developer Postures
 
-There are two modes of operation. **Vibe mode is the default.** Use `/production` to switch to the gated workflow.
+There are two developer postures. **Conductor Mode is the default.** Use `/orchestrator` to switch to the gated Agentic Engineering harness.
 
-### Vibe Mode (default)
+### Conductor Mode (default)
 
-No process. No ceremony. Just build. There are no mandatory phases, no required commands, and no enforced review gates. Use any tools, commands, or agents as you see fit to get the job done fast.
+Real-time, hands-on steering. No process. No ceremony. Just build. There are no mandatory stages, no required commands, and no enforced evaluation gates. Use any tools, commands, or agents as you see fit to get the job done fast.
 
 **Think before you build:** Before writing any code, briefly outline your approach — what you're changing, why, and how. Keep it short (a few sentences, not a document). Then go.
 
-All architectural constraints and language specifications below still apply as **guidance** — write good code — but there are no hard stops or phase gates.
+All architectural constraints and language specifications below still apply as **guidance** — write good code — but there are no hard stops or evaluation gates.
 
-### Production Mode (`/production`)
+### Orchestrator Mode (`/orchestrator`)
 
-Activated by running `/production`. Once active, the following workflow is **MANDATORY** for all feature/implementation work. Every phase is a gate — do not skip phases or reorder them.
+Asynchronous, multi-file delegation. The developer manages high-level system design and reviews outcomes; the harness does the work. Activated by running `/orchestrator`. Once active, the following harness workflow is **MANDATORY** for all feature/implementation work. Every stage ends in an evaluation gate — do not skip stages or reorder them.
 
-**Core principle: Build first, split later.** You cannot decompose a feature into good PRs until the complete implementation exists and is verified. Splitting blind produces arbitrary boundaries. Build the whole thing, get it working, review it — *then* carve it into clean, reviewable PRs.
+**Core principle: Build first, decompose later.** You cannot decompose a feature into good PRs until the complete implementation exists and is verified. Splitting blind produces arbitrary boundaries. Build the whole thing, get it working, evaluate it — *then* carve it into clean, reviewable PRs. This is deliberate **System Decomposition**, performed after the working diff exists, not before.
 
-**Session continuity:** On entering Production mode, check if `DELIVERY_PLAN.md` exists in the workspace root. If it does, read it immediately — it contains the current delivery state from a previous session. Resume from where it left off. When all PRs are delivered and the user has approved the final result, delete `DELIVERY_PLAN.md`.
+**Session continuity:** On entering Orchestrator Mode, check if `DELIVERY_PLAN.md` exists in the workspace root. This file is the **Persistent Memory Spec** — the trajectory file carrying delivery state across sessions. If it exists, read it immediately and resume from where it left off. When all PRs are delivered and the user has approved the final result, delete `DELIVERY_PLAN.md`.
 
 #### Orchestrator model
 
-The main agent is a **pure orchestrator**. It manages `DELIVERY_PLAN.md`, dispatches subagents, enforces gates, and communicates with the user. It **NEVER**:
+The main agent is a **pure orchestrator**. It manages `DELIVERY_PLAN.md`, dispatches subagents, enforces evaluation gates, and communicates with the user. It **NEVER**:
 - Writes, edits, or deletes source files directly
 - Runs `make`, `go test`, or any build/lint commands directly
-- Skips a phase or reorders phases
+- Skips a stage or reorders stages
 
-All implementation and verification work is done by subagents via the Task tool.
+All implementation and verification work is done by subagents via the Task tool. **Harness Guardrails** (hard operational constraints — read-only file permissions, scoped bash allowlists) are enforced per subagent in their frontmatter.
 
-#### Phases
+#### Harness Stages
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Phase 1: PLAN                                               │
-│   Agent: Orchestrator                                       │
-│   Understand the requirement. Research the codebase.        │
-│   Ask clarifying questions. Produce a clear description     │
-│   of what needs to be built and why.                        │
-│   ── Gate: User confirms understanding ──                   │
+│ STAGE 1: INTENT SPECIFICATION & HARNESS CONFIGURATION       │
+│                                                             │
+│ 1a. INTENT SPEC          Agent: Orchestrator                │
+│     Understand the requirement. Research the codebase.      │
+│     Ask clarifying questions. Produce a clear description   │
+│     of what needs to be built and why.                      │
+│     ── Eval Gate: User confirms understanding ──            │
+│                                                             │
+│ 1b. BASELINE             Agent: @general (Task tool)        │
+│     Run build/test and report current harness health.       │
+│     ── Eval Gate: Build passes clean ──                     │
 ├─────────────────────────────────────────────────────────────┤
-│ Phase 2: BASELINE                                           │
-│   Agent: @general (Task tool)                               │
-│   Run build/test and report current health.                 │
-│   ── Gate: Build passes clean ──                            │
-├─────────────────────────────────────────────────────────────┤
-│ Phase 3: BUILD (TDD MANDATORY)                              │
-│   Agent: @general (Task tool)                               │
-│   Implement the COMPLETE feature using strict TDD:          │
+│ STAGE 2: AUTONOMOUS IMPLEMENTATION LOOP                     │
+│                          Agent: @general (Task tool)        │
+│   Implement the COMPLETE feature using strict TDD, running  │
+│   an inner self-correction loop against the test suite:     │
 │     1. RED — Write a failing test for the next behaviour.   │
 │     2. GREEN — Write the minimum code to pass the test.     │
 │     3. REFACTOR — Clean up while all tests stay green.      │
 │   Repeat until the feature is complete end-to-end.          │
 │   No production code may be written without a failing test  │
-│   first. Skipping TDD in this phase is a phase violation.   │
-│   ── Gate: Agent reports done, all tests pass ──            │
+│   first. Skipping TDD in this stage is a harness violation. │
+│   ── Eval Gate: Agent reports done, all tests pass ──       │
 ├─────────────────────────────────────────────────────────────┤
-│ Phase 4: VERIFY                                             │
-│   Agent: @general (Task tool)                               │
-│   Run full build + lint + all tests.                        │
-│   Report pass/fail.                                         │
-│   ── Gate: Build passes clean ──                            │
-│   If FAIL → dispatch @general to fix, then re-run VERIFY.   │
+│ STAGE 3: VERIFICATION & EVALUATION GATES                   │
+│                                                             │
+│ 3a. VERIFY               Agent: @general (Task tool)        │
+│     Run full build + lint + all tests. Report pass/fail.    │
+│     ── Eval Gate: Build passes clean ──                     │
+│     If FAIL → dispatch @general to fix, then re-run VERIFY. │
+│                                                             │
+│ 3b. EVALUATE             Agent: @reviewer (Task tool)       │
+│     Score the complete feature against explicit rubrics:    │
+│       • Task Success — deterministic tests pass             │
+│       • Trajectory Compliance — no unrelated files mutated  │
+│       • Standards — SOLID, KISS, YAGNI, language rules      │
+│       • Security — no hallucinated / slopsquatted deps      │
+│     ── Eval Gate: Zero BLOCKs ──                            │
+│     If BLOCKs → dispatch @general to fix, re-run VERIFY     │
+│     + EVALUATE.                                             │
+│                                                             │
+│ 3c. STOP — MANUAL VERIFICATION   Agent: Orchestrator        │
+│     Present a summary of ALL changes to the user.           │
+│     List every file modified or created.                    │
+│     DO NOT COMMIT. DO NOT RUN GIT ADD/COMMIT/PUSH.          │
+│     The user tests/inspects the complete feature.           │
+│     ── Eval Gate: User confirms the feature is correct ──   │
 ├─────────────────────────────────────────────────────────────┤
-│ Phase 5: REVIEW                                             │
-│   Agent: @reviewer (Task tool)                              │
-│   Code review the complete feature against:                 │
-│     • Global standards (SOLID, KISS, YAGNI)                 │
-│     • Language-specific rules                               │
-│     • Quality checklist                                     │
-│   ── Gate: Zero BLOCKs ──                                   │
-│   If BLOCKs → dispatch @general to fix, re-run VERIFY       │
-│   + REVIEW.                                                 │
-├─────────────────────────────────────────────────────────────┤
-│ Phase 6: STOP — MANUAL VERIFICATION                         │
-│   Agent: Orchestrator                                       │
-│   Present a summary of ALL changes to the user.             │
-│   List every file modified or created.                      │
-│   DO NOT COMMIT. DO NOT RUN GIT ADD/COMMIT/PUSH.            │
-│   The user tests/inspects the complete feature.             │
-│   ── Gate: User confirms the feature is correct ──          │
-├─────────────────────────────────────────────────────────────┤
-│ Phase 7: ARCHITECT (split into PRs)                         │
-│   Agent: @architect (Task tool)                             │
-│   NOW that the full implementation exists and is verified,  │
-│   decompose it into small, reviewable PRs with logical      │
-│   boundaries. Each PR must build and pass tests on its own. │
-│   Output: DELIVERY_PLAN.md                                  │
-│   ── Gate: User approves the PR split ──                    │
-├─────────────────────────────────────────────────────────────┤
-│ Phase 8: DELIVER                                            │
-│   Agent: @general (Task tool)                               │
-│   Short-lived branch strategy (MANDATORY — always used):    │
-│     1. Create a feature branch (e.g. feature/xyz) from main │
-│     2. FOR EACH PR in DELIVERY_PLAN.md:                     │
-│        • Create a short-lived sub-branch off feature branch │
-│        • Cherry-pick/stage the relevant changes             │
-│        • Run build + tests to confirm it stands alone       │
-│        • Create draft PR targeting the feature branch       │
-│     3. ALL PRs target the feature branch, NEVER main.       │
-│   Report all PR URLs to user.                               │
-│   ── Gate: User approves PRs ──                             │
+│ STAGE 4: SYSTEM DECOMPOSITION & STAGED DEPLOYMENT          │
+│                                                             │
+│ 4a. DECOMPOSE            Agent: @architect (Task tool)      │
+│     NOW that the full implementation exists and is verified,│
+│     decompose it into small, reviewable PRs with logical    │
+│     boundaries. Each PR must build and pass tests on its    │
+│     own. Output: DELIVERY_PLAN.md                           │
+│     ── Eval Gate: User approves the PR split ──             │
+│                                                             │
+│ 4b. DEPLOY               Agent: @general (Task tool)        │
+│     Short-lived branch strategy (MANDATORY — always used):  │
+│       1. Create a feature branch (e.g. feature/xyz) off main│
+│       2. FOR EACH PR in DELIVERY_PLAN.md:                   │
+│          • Create a short-lived sub-branch off feature branch│
+│          • Cherry-pick/stage the relevant changes           │
+│          • Run build + tests to confirm it stands alone     │
+│          • Create draft PR targeting the feature branch     │
+│       3. ALL PRs target the feature branch, NEVER main.     │
+│     Report all PR URLs to user.                             │
+│     ── Eval Gate: User approves PRs ──                      │
 ├─────────────────────────────────────────────────────────────┤
 │ DONE — Feature complete. All PRs delivered.                 │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Production Mode — Phase violations
+### Orchestrator Mode — Harness violations
 
 - The orchestrator writing code or running build commands directly is **forbidden**.
-- Splitting into PRs before the feature is fully built, verified, and reviewed is **forbidden**.
-- Skipping BASELINE, VERIFY, or REVIEW is **forbidden**.
+- Decomposing into PRs before the feature is fully built, verified, and evaluated is **forbidden**.
+- Skipping BASELINE, VERIFY, or EVALUATE is **forbidden**.
 - Committing without user approval is **forbidden**. Always stop and wait.
-- Proceeding past a FAIL review verdict is **forbidden**. Fix all BLOCKs first.
+- Proceeding past a FAIL evaluation verdict is **forbidden**. Fix all BLOCKs first.
 
 ---
 
@@ -133,17 +133,17 @@ All implementation and verification work is done by subagents via the Task tool.
 
 | Command | Purpose | Mode |
 |---|---|---|
-| `/production` | Activate Production mode for the current session | Any |
-| `/tdd` | Red/Green TDD protocol (mandatory in Production BUILD phase) | Any |
-| `/next-pr` | Execute next PR from `DELIVERY_PLAN.md` — dispatches BASELINE → BUILD → VERIFY → REVIEW → STOP | Production |
-| `/review` | Invoke `@reviewer` to check changes against all standards | Production (REVIEW phase) |
+| `/orchestrator` | Switch this session into Orchestrator Mode (the gated harness) | Any |
+| `/tdd` | Red/Green TDD protocol (mandatory in the Autonomous Implementation Loop) | Any |
+| `/next-pr` | Execute next PR from `DELIVERY_PLAN.md` — dispatches BASELINE → BUILD → VERIFY → EVALUATE → STOP | Orchestrator |
+| `/review` | Invoke `@reviewer` to evaluate changes against all standards | Orchestrator (EVALUATE stage) |
 
 ## Custom Agents
 
 | Agent | Mode | Purpose |
 |---|---|---|
-| `@architect` | subagent | Decomposes features into small, reviewable PRs. Outputs `DELIVERY_PLAN.md`. Does not write implementation code. |
-| `@reviewer` | subagent | Read-only code reviewer. Checks changes against global standards, language rules, and per-PR quality checklist. Cannot modify files. |
+| `@architect` | subagent | Runs System Decomposition: carves the verified diff into small, reviewable PRs. Outputs `DELIVERY_PLAN.md`. Does not write implementation code. |
+| `@reviewer` | subagent | Read-only evaluation agent. Scores changes against explicit rubrics (task success, trajectory compliance, standards, security). Cannot modify files. |
 
 ---
 
@@ -169,6 +169,7 @@ Rule 5 was previously stated by Fred Brooks in The Mythical Man-Month. Rule 5 is
 - **YAGNI:** Do not build features, abstractions, or flexibility that are not needed right now. Every line of code must justify its existence against a current requirement.
 - **Dependencies:** Standard library first. Require explicit justification before adding third-party dependencies.
 - **No TODOs in code:** Never leave `TODO`, `FIXME`, `HACK`, or similar placeholder comments in committed files. Resolve them before completing a task.
+- **No comments by default:** Emit NO comments unless (a) I explicitly ask for them, or (b) the language mandates a doc comment on a public symbol (godoc on exported Go symbols, docstrings on public Python/TS APIs). Nothing else. No inline narration, no `why` notes, no section banners, no explanatory blocks, no `ponytail:` markers — none. If code needs explaining, rename identifiers or restructure until it doesn't. Before finishing any task, re-scan the diff and delete every comment that is not a mandated doc comment.
 - **Test naming:** Name tests for the behaviour under test, not for the implementation detail or unrelated mechanism they happen to contrast against. State what the code does, not what it isn't subject to. A reader should understand the assertion without prior knowledge of internal flags or gates. Prefer "renders banner in list response" over "serves banner regardless of FEATURE_FLAG"; prefer "returns 404 for unknown id" over "does not hit the gated path". Encode setup conditions (feature flags, gates) in the test body, not the name.
 
 ## Language Specifications

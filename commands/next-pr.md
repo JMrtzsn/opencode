@@ -4,7 +4,7 @@ description: Execute the next pending PR from DELIVERY_PLAN.md
 
 Execute the next pending Pull Request from `DELIVERY_PLAN.md`.
 
-This command is used in **Phase 8: DELIVER** — the complete feature is already built, verified, and reviewed. No new implementation happens here.
+This command runs in **Stage 4: System Decomposition & Staged Deployment (DEPLOY)** — the complete feature is already built, verified, and evaluated. No new implementation happens here.
 
 ## Execution Protocol
 
