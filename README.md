@@ -63,9 +63,9 @@ Delivery is deliberately separate from building the feature. Use it only when a 
 |---|---|
 | Instructions and rules | Lean global `AGENTS.md`, project `AGENTS.md`, commands, agent prompts, and on-demand skills. |
 | Tools | OpenCode file, search, shell, web, task, skill, and GitHub tooling with global and per-agent permissions. |
-| Execution environment | Trusted local repositories run on the host with scoped permissions; unknown repositories require a sandbox or container. |
+| Execution environment | Host execution is OpenCode's current runtime. The instruction policy requires stopping before executing unknown repositories; sandboxing is external and not automatically enforced. |
 | Orchestration | `/orchestrator` coordinates `@implementer`, `@verifier`, and `@reviewer`; `/delivery` invokes `@architect` after approval. |
-| Guardrails and hooks | OpenCode permissions plus `plugins/guardrails.ts`; repository Git hooks and required CI enforce checks outside OpenCode. |
+| Guardrails and hooks | OpenCode permissions and `plugins/guardrails.ts` enforce selected tool restrictions. Git hooks, CI, and branch protection are repository-owned external controls. |
 | Observability | OpenCode session logs, verifier command evidence, reviewer findings, Git history, and CI results. |
 
 OpenCode provides the model runtime, sessions, tools, sub-agent execution, permissions, skills, plugins, and context compaction. This repository supplies the factory policy and specialist behavior. Each project supplies its executable contract through tests, evals, canonical commands, architecture rules, and CI.
@@ -130,18 +130,23 @@ Keep each project's `AGENTS.md` short and executable. Include only what differs 
 
 Tests and evals are the contract. Do not copy global policy or language standards into every project; the global `AGENTS.md` and on-demand skills already provide them.
 
-## Execution Policy
+## Control Levels
 
-- Trusted local repositories may execute on the host through scoped permissions.
-- Unknown or untrusted repositories must use an isolated sandbox or container before any code is executed.
-- Production repositories must repeat canonical checks and secret scanning in required CI before merge.
-- OpenCode session logs, verifier evidence, reviewer findings, Git history, and CI output are the current observability record. Add custom metrics only when an observed operational question requires them.
+| Level | Meaning | Current examples |
+|---|---|---|
+| Instruction policy | The model is told what to do, but no deterministic control guarantees compliance. | Stop before executing unknown repositories; require production CI; use TDD; follow workflow gates. |
+| OpenCode-enforced control | OpenCode permissions or plugin code blocks the action inside OpenCode. | Approval for commit/push, denial of destructive Git commands, scoped agent tools, sensitive-file and force-push blocking. |
+| External enforcement | A system outside this config blocks or validates the action. | Container sandbox, Git hooks, required CI checks, secret scanning, and branch protection. |
 
-## Deterministic Guardrails
+Unknown-repository sandboxing and production CI are currently instruction policies, not runtime guardrails. To enforce them, launch OpenCode inside an isolated environment for untrusted code and configure required checks and branch protection in each production repository.
+
+OpenCode session logs, verifier evidence, reviewer findings, Git history, and CI output are the current observability record. Add custom metrics only when an observed operational question requires them.
+
+## OpenCode-Enforced Guardrails
 
 OpenCode permissions and `plugins/guardrails.ts` protect actions performed through OpenCode. The plugin runs before tool execution, logs blocked attempts, and rejects access to credential/private-key files, destructive Git/filesystem commands, force pushes, and `--no-verify` bypasses.
 
-Repository-owned hooks and CI remain authoritative outside OpenCode:
+Repository-owned controls remain authoritative outside OpenCode:
 
 ```text
 OpenCode permissions and plugin -> agent tool calls

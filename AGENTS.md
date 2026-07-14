@@ -38,8 +38,8 @@ At the final gate, guide the user to the smallest fitting next step: finish loca
 ## Execution Policy
 
 - Work on trusted local repositories may run on the host with scoped agent permissions.
-- Do not execute code from an unknown or untrusted repository on the host. Ask for an isolated sandbox or container first.
-- Production changes require repository-owned CI to repeat canonical checks and security scanning before merge.
+- Treat the following as instruction policy, not an OpenCode-enforced sandbox: do not execute code from an unknown or untrusted repository on the host; ask for an isolated environment first.
+- Treat production CI as external enforcement: repository-owned required checks and security scanning must repeat canonical verification before merge.
 
 ## Custom Extensions
 
