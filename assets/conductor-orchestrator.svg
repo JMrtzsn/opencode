@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850" role="img" aria-labelledby="title desc">
+  <title id="title">Conductor and Orchestrator developer modes</title>
+  <desc id="desc">Conductor mode provides synchronous fine-grained control, while Orchestrator mode provides asynchronous multi-agent delegation. Developers move between both depending on the task.</desc>
+  <defs>
+    <linearGradient id="scale" x1="0" x2="1">
+      <stop offset="0" stop-color="#edf4ff"/>
+      <stop offset="1" stop-color="#347ce1"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0v6l9-3z" fill="#343a40"/></marker>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #17191c; }
+      .heading { font-size: 28px; font-weight: 700; }
+      .subheading { font-size: 17px; font-weight: 600; }
+      .body { font-size: 16px; }
+      .small { font-size: 13px; }
+      .card { fill: #f8f9fa; stroke: #444; stroke-width: 1.4; }
+      .inner { fill: #fff; stroke: #444; stroke-width: 1.2; }
+      .chip { fill: #edf4ff; stroke: #3f83f8; stroke-width: 1.5; }
+      .flow { fill: none; stroke: #343a40; stroke-width: 3; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect x="25" y="20" width="1150" height="810" rx="28" fill="#fff" stroke="#b8bec6" stroke-width="1.5"/>
+  <text x="600" y="55" text-anchor="middle" class="small">Not either/or - both,</text>
+  <text x="600" y="72" text-anchor="middle" class="small">depending on the task</text>
+  <line x1="600" y1="80" x2="600" y2="710" stroke="#8b929a" stroke-width="2" stroke-dasharray="6 7"/>
+
+  <rect x="58" y="90" width="500" height="630" rx="22" class="card"/>
+  <text x="84" y="138" class="heading" fill="#1672e8">∿</text>
+  <text x="120" y="138" class="heading">Conductor</text>
+  <text x="120" y="162" class="subheading">Real-time • Synchronous • In-IDE</text>
+  <rect x="80" y="190" width="456" height="205" rx="22" class="inner"/>
+  <text x="165" y="232" class="body">Developer</text>
+  <path d="M255 227 H365" class="flow"/>
+  <text x="310" y="247" text-anchor="middle" class="small">prompt</text>
+  <text x="390" y="277" class="body">Agent</text>
+  <path d="M365 272 H255" class="flow"/>
+  <text x="310" y="292" text-anchor="middle" class="small">generates code</text>
+  <text x="165" y="320" class="body">Developer</text>
+  <path d="M255 315 H365" class="flow"/>
+  <text x="310" y="335" text-anchor="middle" class="small">reviews inline</text>
+  <text x="390" y="365" class="body">Agent</text>
+  <path d="M365 360 H255" class="flow"/>
+  <text x="310" y="380" text-anchor="middle" class="small">refines</text>
+
+  <rect x="80" y="420" width="224" height="35" rx="8" class="chip"/><text x="92" y="443" class="body">Inline Completion</text>
+  <rect x="312" y="420" width="224" height="35" rx="8" class="chip"/><text x="324" y="443" class="body">Chat-in-Editor</text>
+  <rect x="80" y="462" width="224" height="35" rx="8" class="chip"/><text x="92" y="485" class="body">Diff Review &amp; Accept/Review</text>
+  <rect x="312" y="462" width="224" height="35" rx="8" class="chip"/><text x="324" y="485" class="body">Quick Fix / Refactor</text>
+  <text x="88" y="575" class="body">•  Keystroke-level control</text>
+  <text x="88" y="602" class="body">•  Immediate feedback</text>
+  <text x="88" y="629" class="body">•  Single-file scope</text>
+  <text x="88" y="656" class="body">•  Developer always in the loop</text>
+  <text x="80" y="692" class="subheading">Best for: <tspan font-weight="400">Exploratory coding, prototyping, learning a new API</tspan></text>
+
+  <rect x="642" y="90" width="500" height="630" rx="22" class="card"/>
+  <text x="668" y="138" class="heading" fill="#1672e8">♧</text>
+  <text x="704" y="138" class="heading">Orchestrator</text>
+  <text x="704" y="162" class="subheading">Asynchronous • High-level • Multi-agent</text>
+  <rect x="664" y="190" width="456" height="205" rx="22" class="inner"/>
+  <text x="710" y="232" class="body">Developer</text>
+  <text x="710" y="250" class="small">defines specific task</text>
+  <path d="M825 225 L930 258" class="flow"/>
+  <text x="945" y="270" class="body">Agent(s)</text>
+  <text x="945" y="288" class="small">work independently</text>
+  <text x="710" y="332" class="body">Developer</text>
+  <text x="710" y="350" class="small">reviews PR / output</text>
+  <path d="M930 278 L825 320" class="flow"/>
+  <path d="M825 340 L930 375" class="flow"/>
+  <text x="945" y="382" class="body">approves or corrects</text>
+
+  <rect x="664" y="420" width="224" height="35" rx="8" class="chip"/><text x="676" y="443" class="body">Task / Issue Assignment</text>
+  <rect x="896" y="420" width="224" height="35" rx="8" class="chip"/><text x="908" y="443" class="body">Background Terminal Agents</text>
+  <rect x="664" y="462" width="224" height="35" rx="8" class="chip"/><text x="676" y="485" class="body">CI/CD Integration</text>
+  <rect x="896" y="462" width="224" height="35" rx="8" class="chip"/><text x="908" y="485" class="body">Eval &amp; Test Suites</text>
+  <rect x="664" y="504" width="224" height="35" rx="8" class="chip"/><text x="676" y="527" class="body">Multi-Agent Coordination</text>
+  <text x="672" y="575" class="body">•  Goal-level control</text>
+  <text x="672" y="602" class="body">•  Delayed feedback</text>
+  <text x="672" y="629" class="body">•  Multi-file scope</text>
+  <text x="672" y="656" class="body">•  Reviews outcomes, not keystrokes</text>
+  <text x="664" y="692" class="subheading">Best for: <tspan font-weight="400">Feature implementation, migrations, test generation</tspan></text>
+
+  <rect x="58" y="750" width="1084" height="38" rx="8" fill="url(#scale)" stroke="#3f83f8" stroke-width="1.4"/>
+  <text x="72" y="775" class="body">Fine-grained control</text>
+  <text x="1128" y="775" text-anchor="end" class="body" fill="#fff" font-weight="700">High-leverage delegation</text>
+  <text x="600" y="813" text-anchor="middle" class="body">Most developers move fluidly between both.</text>
+</svg>

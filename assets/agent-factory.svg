@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">Agent factory operating model</title>
+  <desc id="desc">Developers define specifications and guardrails, then review and approve output from planning, coding, testing, and verification agents. Failed verification feeds back into planning.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#747b84"/></marker>
+    <marker id="red-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#e34234"/></marker>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #17191c; }
+      .heading { font-size: 28px; font-weight: 700; }
+      .label { font-size: 21px; font-weight: 600; }
+      .small { font-size: 17px; }
+      .flow { stroke: #747b84; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+      .drop { stroke: #747b84; stroke-width: 2.5; stroke-dasharray: 7 7; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect x="45" y="28" width="1110" height="192" rx="27" fill="#edf4ff" stroke="#3f83f8" stroke-width="2"/>
+  <text x="73" y="78" class="heading">Developer Zone</text>
+  <circle cx="145" cy="132" r="17" fill="none" stroke="#17191c" stroke-width="4"/>
+  <path d="M130 149 C110 153 110 174 110 180 L180 180 C180 174 180 153 160 149" fill="none" stroke="#17191c" stroke-width="4"/>
+  <text x="145" y="204" text-anchor="middle" class="small">Developer</text>
+  <path d="M220 155 H290" class="flow"/>
+  <text x="375" y="162" text-anchor="middle" class="label">Define Specs</text>
+  <path d="M455 155 H525" class="flow"/>
+  <text x="615" y="148" text-anchor="middle" class="label">Design</text>
+  <text x="615" y="172" text-anchor="middle" class="label">Guardrails</text>
+  <path d="M695 155 H765" class="flow"/>
+  <text x="855" y="148" text-anchor="middle" class="label">Review &amp;</text>
+  <text x="855" y="172" text-anchor="middle" class="label">Approve</text>
+
+  <rect x="45" y="245" width="1110" height="355" rx="27" fill="#fff" stroke="#62676d" stroke-width="2.5"/>
+  <text x="73" y="298" class="heading">Agent Factory Floor</text>
+
+  <path d="M115 345 H175 L145 382 Z" fill="none" stroke="#17191c" stroke-width="3"/>
+  <line x1="145" y1="382" x2="145" y2="398" stroke="#17191c" stroke-width="3"/>
+  <text x="145" y="420" text-anchor="middle" class="small">Specs, Context,</text>
+  <text x="145" y="442" text-anchor="middle" class="small">Requirements</text>
+  <path d="M220 395 H290" class="flow"/>
+
+  <rect x="310" y="355" width="135" height="72" rx="9" fill="#edf4ff" stroke="#5790fa" stroke-width="2.5"/>
+  <text x="377" y="386" text-anchor="middle" class="label">Planning</text>
+  <text x="377" y="411" text-anchor="middle" class="label">Agent</text>
+  <path d="M445 395 H535" class="flow"/>
+
+  <rect x="555" y="355" width="135" height="72" rx="9" fill="#edf4ff" stroke="#5790fa" stroke-width="2.5"/>
+  <text x="622" y="386" text-anchor="middle" class="label">Coding</text>
+  <text x="622" y="411" text-anchor="middle" class="label">Agent</text>
+  <path d="M690 395 H775" class="flow"/>
+
+  <path d="M850 335 L910 395 L850 455 L790 395 Z" fill="#fff6f4" stroke="#ef4438" stroke-width="2.5"/>
+  <text x="850" y="387" text-anchor="middle" class="small">Tests &amp;</text>
+  <text x="850" y="408" text-anchor="middle" class="small">Verification</text>
+  <rect x="943" y="352" width="54" height="30" rx="9" fill="#eaf9ef" stroke="#159447" stroke-width="2"/>
+  <text x="970" y="373" text-anchor="middle" class="small" fill="#159447">Pass</text>
+  <path d="M910 395 H1015" class="flow"/>
+  <path d="M1038 345 H1071 L1086 360 V410 H1038 Z M1071 345 V360 H1086" fill="none" stroke="#42474d" stroke-width="2.5"/>
+  <text x="1062" y="435" text-anchor="middle" class="small">Verified</text>
+  <text x="1062" y="456" text-anchor="middle" class="small">Output</text>
+
+  <path d="M850 455 V500 H377 V435" stroke="#e34234" stroke-width="2.5" stroke-dasharray="7 7" fill="none" marker-end="url(#red-arrow)"/>
+  <rect x="829" y="463" width="43" height="28" rx="8" fill="#fff5f3" stroke="#e34234" stroke-width="2"/>
+  <text x="850" y="483" text-anchor="middle" class="small" fill="#e34234">Fail</text>
+  <text x="615" y="494" text-anchor="middle" class="small" fill="#e34234">Failure feedback</text>
+
+  <line x1="90" y1="545" x2="1110" y2="545" stroke="#17191c" stroke-width="2"/>
+  <line x1="90" y1="536" x2="90" y2="554" stroke="#17191c" stroke-width="2"/>
+  <line x1="1110" y1="536" x2="1110" y2="554" stroke="#17191c" stroke-width="2"/>
+  <text x="600" y="577" text-anchor="middle" class="small">Guardrails: token limits, security policies, style rules, architectural constraints</text>
+
+  <path d="M377 175 V342" class="drop"/>
+  <path d="M622 175 V342" class="drop"/>
+  <path d="M850 175 V325" class="drop"/>
+
+  <text x="1140" y="630" text-anchor="end" class="small" font-style="italic" fill="#4d535a">The developer's output is not code -</text>
+  <text x="1140" y="652" text-anchor="end" class="small" font-style="italic" fill="#4d535a">it is the factory that produces code.</text>
+</svg>

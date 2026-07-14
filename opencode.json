@@ -4,21 +4,18 @@
   "model": "github-copilot/gpt-5.6-sol",
   "plugin": ["@dietrichgebert/ponytail"],
 
-  "provider": {
-    "ollama": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama (local)",
-      "options": {
-        "baseURL": "http://localhost:11434/v1"
-      },
-      "models": {
-        "qwen2.5-coder:7b": {
-          "name": "Qwen 2.5 Coder 7B (local)"
-        },
-        "qwen2.5-coder:32b": {
-          "name": "Qwen 2.5 Coder 32B (local)"
-        }
-      }
+  "compaction": {
+    "auto": true,
+    "prune": true
+  },
+
+  "permission": {
+    "bash": {
+      "git commit*": "ask",
+      "git push*": "ask",
+      "git reset --hard*": "deny",
+      "git checkout --*": "deny",
+      "git clean*": "deny"
     }
   }
 }
