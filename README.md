@@ -8,6 +8,8 @@ Personal [OpenCode](https://opencode.ai) configuration. Applies globally across 
 
 The goal of this setup is to build the system that builds software. The developer defines specifications and guardrails, then reviews and approves verified output. Agents plan and implement within those constraints; executable checks reject failures and route evidence back into the loop.
 
+> Generation is solved. Verification, judgment, and direction are the new craft.
+
 The factory consists of:
 
 - Specifications and context that define the required outcome.
@@ -69,6 +71,21 @@ Delivery is deliberately separate from building the feature. Use it only when a 
 | Observability | OpenCode session logs, verifier command evidence, reviewer findings, Git history, and CI results. |
 
 OpenCode provides the model runtime, sessions, tools, sub-agent execution, permissions, skills, plugins, and context compaction. This repository supplies the factory policy and specialist behavior. Each project supplies its executable contract through tests, evals, canonical commands, architecture rules, and CI.
+
+## Model Routing
+
+Model selection is static by role, making routing predictable and easy to audit:
+
+| Work | Model | Reason |
+|---|---|---|
+| Main agent and Orchestrator | `gpt-5.6-sol` | Requirements, solution selection, coordination, and final judgment. |
+| `@implementer` | `gpt-5.6-sol` | Initial implementation and self-correction need strong code reasoning. |
+| `@architect` | `gpt-5.6-sol` | Decomposition requires architectural and dependency judgment. |
+| `@reviewer` | `claude-opus-4.8` | Independent Anthropic review with strong judgment at the same available cost. |
+| `@verifier` | `gpt-5.6-luna` | Cost-efficient execution and reporting of deterministic repository checks. |
+| OpenCode small-model tasks | `gpt-5.6-luna` | Cost-efficient titles, summaries, and other lightweight internal work. |
+
+Test design remains with `@implementer`; generating useful tests requires understanding behavior and failure modes. CI monitoring is external to this configuration.
 
 ## File Reference
 

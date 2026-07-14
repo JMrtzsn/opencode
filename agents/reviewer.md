@@ -1,6 +1,7 @@
 ---
 description: Runs the EVALUATE gate against task success, trajectory, standards, and security. Read-only and uses supplied verification evidence.
 mode: subagent
+model: github-copilot/claude-opus-4.8
 temperature: 0.1
 permission:
   edit:

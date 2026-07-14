@@ -1,6 +1,7 @@
 ---
 description: Implements an approved outcome with strict TDD, relevant skills, and no Git delivery permissions.
 mode: subagent
+model: github-copilot/gpt-5.6-sol
 temperature: 0.1
 permission:
   edit: allow

@@ -1,6 +1,7 @@
 ---
 description: Runs canonical repository checks and returns deterministic evidence. Read-only and cannot perform Git delivery actions.
 mode: subagent
+model: github-copilot/gpt-5.6-luna
 temperature: 0
 permission:
   edit: deny

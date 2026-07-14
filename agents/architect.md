@@ -1,6 +1,7 @@
 ---
 description: Runs System Decomposition — carves the verified working diff into small, reviewable PRs. Does not write implementation code.
 mode: subagent
+model: github-copilot/gpt-5.6-sol
 temperature: 0.1
 permission:
   edit:
