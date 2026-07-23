@@ -28,7 +28,12 @@ Real-time, hands-on steering for exploration, debugging, unfamiliar code, and wo
 
 ### Orchestrator Mode (`/orchestrator`)
 
-Delegated production work for well-defined outcomes that benefit from independent implementation, verification, and evaluation. Objective gates advance automatically; no skipping or reordering.
+Delegated production work for well-defined outcomes that benefit from independent implementation, verification, and evaluation. At startup, choose selective escalation or human review at every gate; no skipping or reordering.
+
+| Oversight mode | Behavior |
+|---|---|
+| **Selective escalation** | Objective gates advance automatically. The orchestrator asks only for outcome-changing ambiguity, unsafe or irreversible actions, uncertain baseline failures, policy conflicts, or stalled correction loops. |
+| **Always human review** | The orchestrator presents evidence and waits for explicit approval at every evaluation gate. |
 
 ```
 Solution selection and inferred contract → Baseline → Implementation
@@ -41,7 +46,7 @@ Solution selection and inferred contract → Baseline → Implementation
 | **2 — Autonomous Implementation Loop** | IMPLEMENT | `@implementer` builds the complete feature using strict TDD and relevant skills. No production code without a failing test. |
 | **3 — Verification & Evaluation Gates** | VERIFY, EVALUATE, COMPLETE | `@verifier` runs canonical checks; `@reviewer` evaluates requirements, diff, evidence, security, and the difficult final 20%; failures loop back automatically and passing output completes. |
 
-The main agent is a pure orchestrator: it never writes code or runs builds directly. Implementation, verification, and evaluation are delegated to specialists with scoped permissions. It asks only for outcome-changing ambiguity, unsafe or irreversible actions, uncertain baseline failures, or two correction loops without progress. After verification it recommends the smallest fitting next step without requesting routine review.
+The main agent is a pure orchestrator: it never writes code or runs builds directly. Implementation, verification, and evaluation are delegated to specialists with scoped permissions. Selective escalation is the recommended default; Always human review restores approval at every gate. After verification it recommends the smallest fitting next step.
 
 ### Guided Solution Selection
 

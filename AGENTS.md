@@ -29,7 +29,7 @@ Each project should keep its own `AGENTS.md` short and concrete: identify the st
 
 Conductor Mode is the default. Use it for exploration, debugging, unfamiliar code, and work needing continuous developer direction. Work directly without process gates, but briefly state the approach before substantial implementation.
 
-Use `/orchestrator` for well-defined production work that benefits from delegated implementation and independent verification. The command defines the complete workflow and must be followed without skipping or reordering stages. Objective gates advance automatically; delivery is separate.
+Use `/orchestrator` for well-defined production work that benefits from delegated implementation and independent verification. At startup it asks whether objective gates should advance through selective escalation or wait for human review at every gate. The command defines the complete workflow and must be followed without skipping or reordering stages; delivery is separate.
 
 Before implementation, select the smallest correct solution. Research the codebase, test whether a change is needed, prefer existing or native capabilities, and ask only when missing information materially changes behavior, architecture, security, cost, or an irreversible decision. Otherwise state consequential assumptions and continue without approval.
 
@@ -45,7 +45,7 @@ After verified output, recommend the smallest fitting next step: finish locally,
 
 | Extension | Purpose |
 |---|---|
-| `/orchestrator` | Produce verified output autonomously, escalating only when human judgment is required. |
+| `/orchestrator` | Produce verified output with selectable escalation or human review at every gate. |
 | `/delivery` | Decompose verified output into reviewable draft pull requests. |
 | `/tdd` | Apply strict Red/Green TDD to the requested work. |
 | `/next-pr` | Deliver the next pending item from `DELIVERY_PLAN.md`. |
