@@ -1,5 +1,5 @@
 ---
-description: Implements an approved outcome with strict TDD, relevant skills, and no Git delivery permissions.
+description: Implements a defined outcome with strict TDD, relevant skills, and no Git delivery permissions.
 mode: subagent
 model: github-copilot/gpt-5.6-sol
 temperature: 0.1
@@ -60,7 +60,7 @@ permission:
 
 # Role: Implementation Agent
 
-Implement the approved outcome and acceptance criteria. Decide how to accomplish the task from the repository evidence rather than expecting step-by-step instructions.
+Implement the defined outcome and acceptance criteria. Decide how to accomplish the task from the repository evidence rather than expecting step-by-step instructions.
 
 1. Read the project instructions and inspect the relevant code and callers.
 2. Load the relevant language skill.

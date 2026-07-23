@@ -6,7 +6,7 @@ Personal [OpenCode](https://opencode.ai) configuration. Applies globally across 
 
 ![Developer-controlled agent factory: specifications and guardrails flow through planning, coding, and verification, with failures routed back for correction](assets/agent-factory.svg)
 
-The goal of this setup is to build the system that builds software. The developer defines specifications and guardrails, then reviews and approves verified output. Agents plan and implement within those constraints; executable checks reject failures and route evidence back into the loop.
+The goal of this setup is to build the system that builds software. The developer defines specifications and guardrails, then stays on the loop while agents plan, implement, verify, and self-correct. Executable checks reject failures; humans are escalated only for uncertainty, policy boundaries, or externally visible actions.
 
 > Generation is solved. Verification, judgment, and direction are the new craft.
 
@@ -28,24 +28,24 @@ Real-time, hands-on steering for exploration, debugging, unfamiliar code, and wo
 
 ### Orchestrator Mode (`/orchestrator`)
 
-Delegated production work for well-defined outcomes that benefit from independent implementation, verification, and evaluation. Every stage ends in a gate; no skipping or reordering.
+Delegated production work for well-defined outcomes that benefit from independent implementation, verification, and evaluation. Objective gates advance automatically; no skipping or reordering.
 
 ```
-Solution selection and acceptance contract → Baseline → Implementation
-  → Verification → Evaluation → Human approval
+Solution selection and inferred contract → Baseline → Implementation
+  → Verification → Evaluation → Verified output
 ```
 
 | Stage | Sub-steps | What happens |
 |---|---|---|
-| **1 — Intent Specification & Harness Configuration** | SOLUTION SELECTION, BASELINE | Research the problem, recommend the smallest correct approach, agree on tradeoffs and the acceptance contract, then `@verifier` records baseline evidence. |
+| **1 — Intent Specification & Harness Configuration** | SOLUTION SELECTION, BASELINE | Research the problem, select the smallest correct approach, infer a verifiable contract, then `@verifier` records baseline evidence. Escalate only when missing information changes the outcome. |
 | **2 — Autonomous Implementation Loop** | IMPLEMENT | `@implementer` builds the complete feature using strict TDD and relevant skills. No production code without a failing test. |
-| **3 — Verification & Evaluation Gates** | VERIFY, EVALUATE, STOP | `@verifier` runs canonical checks; `@reviewer` evaluates requirements, diff, evidence, security, and the difficult final 20%; the developer approves output. |
+| **3 — Verification & Evaluation Gates** | VERIFY, EVALUATE, COMPLETE | `@verifier` runs canonical checks; `@reviewer` evaluates requirements, diff, evidence, security, and the difficult final 20%; failures loop back automatically and passing output completes. |
 
-The main agent is a pure orchestrator: it never writes code or runs builds directly. Implementation, verification, and evaluation are delegated to specialists with scoped permissions. At the final gate it recommends the smallest fitting next step: finish locally, create one cohesive draft PR, or use `/delivery` for multiple separable review units.
+The main agent is a pure orchestrator: it never writes code or runs builds directly. Implementation, verification, and evaluation are delegated to specialists with scoped permissions. It asks only for outcome-changing ambiguity, unsafe or irreversible actions, uncertain baseline failures, or two correction loops without progress. After verification it recommends the smallest fitting next step without requesting routine review.
 
 ### Guided Solution Selection
 
-Before implementation, OpenCode checks whether code is needed, searches for an existing project solution, and prefers standard-library, native-platform, or already-installed capabilities. It recommends one approach and states the tradeoff that matters. Alternatives are shown only when they materially change behavior, risk, cost, or reversibility. If the task is still exploratory, OpenCode recommends staying in Conductor Mode instead of forcing it through the production harness.
+Before implementation, OpenCode checks whether code is needed, searches for an existing project solution, and prefers standard-library, native-platform, or already-installed capabilities. It selects one approach and states consequential assumptions while continuing autonomously. It asks only when different answers materially change behavior, architecture, security, cost, or reversibility. If the task is still exploratory, OpenCode recommends staying in Conductor Mode instead of forcing it through the production harness.
 
 ### Delivery (`/delivery`)
 
@@ -112,7 +112,8 @@ Test design remains with `@implementer`; generating useful tests requires unders
 
 - **TDD is mandatory** in Orchestrator Mode. No production code without a failing test first.
 - **Build first, decompose later.** The full feature is built and verified before decomposing into PRs.
-- **Delivery is separate.** Orchestrator Mode ends at human-approved verified output.
+- **Human-on-the-loop.** Objective gates advance automatically; uncertain, unsafe, irreversible, or stalled work escalates.
+- **Delivery is separate.** Orchestrator Mode ends at verified output and never commits automatically.
 - **PRs are always drafts.** Never create a non-draft PR unless explicitly requested.
 - **No TODOs in code.** Resolve everything before completing a task.
 - **Standard library first.** Third-party dependencies require justification.

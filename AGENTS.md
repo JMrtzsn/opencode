@@ -29,11 +29,11 @@ Each project should keep its own `AGENTS.md` short and concrete: identify the st
 
 Conductor Mode is the default. Use it for exploration, debugging, unfamiliar code, and work needing continuous developer direction. Work directly without process gates, but briefly state the approach before substantial implementation.
 
-Use `/orchestrator` for well-defined production work that benefits from delegated implementation and independent verification. The command defines the complete workflow and must be followed without skipping or reordering stages. It ends at human-approved verified output; delivery is separate.
+Use `/orchestrator` for well-defined production work that benefits from delegated implementation and independent verification. The command defines the complete workflow and must be followed without skipping or reordering stages. Objective gates advance automatically; delivery is separate.
 
-Before implementation, guide the user toward the smallest correct solution. Research the codebase, test whether a change is needed, prefer existing or native capabilities, state the recommended approach and decisive tradeoff, and ask only questions whose answers change the solution. Get confirmation on the selected outcome and acceptance contract in Orchestrator Mode.
+Before implementation, select the smallest correct solution. Research the codebase, test whether a change is needed, prefer existing or native capabilities, and ask only when missing information materially changes behavior, architecture, security, cost, or an irreversible decision. Otherwise state consequential assumptions and continue without approval.
 
-At the final gate, guide the user to the smallest fitting next step: finish locally, create one draft PR for a cohesive change, or use `/delivery` only for multiple separable review units. Never begin commits or delivery without explicit approval.
+After verified output, recommend the smallest fitting next step: finish locally, create one draft PR for a cohesive change, or use `/delivery` only for multiple separable review units. Do not request routine human review; require explicit approval only before commits, pushes, PRs, or other externally visible actions.
 
 ## Execution Policy
 
@@ -45,12 +45,12 @@ At the final gate, guide the user to the smallest fitting next step: finish loca
 
 | Extension | Purpose |
 |---|---|
-| `/orchestrator` | Produce human-approved verified output through the gated workflow. |
+| `/orchestrator` | Produce verified output autonomously, escalating only when human judgment is required. |
 | `/delivery` | Decompose verified output into reviewable draft pull requests. |
 | `/tdd` | Apply strict Red/Green TDD to the requested work. |
 | `/next-pr` | Deliver the next pending item from `DELIVERY_PLAN.md`. |
 | `/review` | Run the read-only evaluation agent on current changes. |
-| `@implementer` | Implement approved outcomes with TDD and no delivery permissions. |
+| `@implementer` | Implement defined outcomes with TDD and no delivery permissions. |
 | `@verifier` | Run canonical checks and report deterministic evidence without editing. |
 | `@architect` | Decompose a verified feature into reviewable pull requests. |
 | `@reviewer` | Evaluate a diff against task, trajectory, standards, and security rubrics. |
