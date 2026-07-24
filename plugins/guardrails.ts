@@ -9,7 +9,7 @@ const blockedCommand = [
   /\bgit\s+(?:\S+\s+)*?clean\b/i,
   /\bgit\s+(?:\S+\s+)*?checkout\s+--\b/i,
   /\bgit\s+(?:\S+\s+)*?branch\s+-D\b/i,
-  /(?:^|[;&|\n]\s*)(?:sudo\s+)?rm\s+(?:-[A-Za-z]*r[A-Za-z]*f[A-Za-z]*|-[A-Za-z]*f[A-Za-z]*r[A-Za-z]*|--recursive\s+--force|--force\s+--recursive)\b/i,
+  /(?:^|[;&|\n]\s*)(?:sudo\s+)?rm\s+(?=[^;&|\n]*(?:-[A-Za-z]*r[A-Za-z]*|--recursive)(?:\s|$))(?=[^;&|\n]*(?:-[A-Za-z]*f[A-Za-z]*|--force)(?:\s|$))/i,
 ]
 
 function containsSensitivePath(text: string): boolean {

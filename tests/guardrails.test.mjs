@@ -16,6 +16,7 @@ describe("guardToolCall", () => {
     assert.throws(() => guardToolCall("bash", { command: "git commit --no-verify -m unsafe" }))
     assert.throws(() => guardToolCall("bash", { command: "git push --force" }))
     assert.throws(() => guardToolCall("bash", { command: "rm -rf build" }))
+    assert.throws(() => guardToolCall("bash", { command: "rm -r -f build" }))
     assert.throws(() => guardToolCall("bash", { command: "sudo rm -rf build" }))
     assert.doesNotThrow(() => guardToolCall("bash", { command: "git status" }))
   })

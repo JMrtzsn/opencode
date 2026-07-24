@@ -13,11 +13,7 @@
 - Name tests for observable behavior, with setup conditions in the test body.
 - Use the relevant language skill for Go, TypeScript, or Python work.
 
-## Recommended Project Instructions
-
-Each project should keep its own `AGENTS.md` short and concrete: identify the stack, canonical format/lint/build/test commands, architectural boundaries, security constraints, and any rules learned from prior agent failures. Tests and evals are the executable contract; do not duplicate general language guidance that already lives in skills.
-
-## Git And Pull Requests
+## Git Safety
 
 - Never discard changes you did not make.
 - Commit, push, or create a pull request only when explicitly requested.
@@ -39,7 +35,7 @@ After verified output, recommend the smallest fitting next step: finish locally,
 
 - Work on trusted local repositories may run on the host with scoped agent permissions.
 - Treat the following as instruction policy, not an OpenCode-enforced sandbox: do not execute code from an unknown or untrusted repository on the host; ask for an isolated environment first.
-- Treat production CI as external enforcement: repository-owned required checks and security scanning must repeat canonical verification before merge.
+- Treat production CI as external enforcement: when repository policy or branch protection identifies a production path, required checks and security scanning must repeat canonical verification before merge.
 
 ## Custom Extensions
 

@@ -6,7 +6,7 @@ subtask: true
 
 Evaluate all uncommitted changes in the current working tree against the global standards and relevant language skills. This is the **Stage 3 EVALUATE gate** of Orchestrator Mode.
 
-1. Run `git diff` to see unstaged changes and `git diff --cached` to see staged changes.
+1. Run `git status --short`, `git diff`, and `git diff --cached`. Read every untracked file reported by status so new-file contents are included in the review.
 2. Apply the full evaluation rubric: task success, trajectory compliance (no unrelated files mutated), global + relevant language-skill standards, and security (no hallucinated / slopsquatted dependencies).
 3. Output the structured evaluation verdict (PASS/FAIL) with findings.
 4. If FAIL, list every BLOCK item that must be resolved before the user commits.
