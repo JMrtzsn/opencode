@@ -23,24 +23,31 @@ In Selective escalation mode, proceed autonomously using the smallest reasonable
 
 When escalating, ask one focused question, state the blocking evidence and recommended default, then resume from the current stage after the answer. Preferences, naming choices, reversible implementation details, and clean objective gates are not reasons to ask.
 
-**STAGE 1 — Intent Specification & Harness Configuration**
-1. **INTENT SPEC AND SOLUTION SELECTION** — Understand the requirement and research the codebase before implementation. Select the smallest correct solution:
+**STAGE 1 — Specification & Planning**
+1. **SPECIFY** — Turn the request into a verifiable contract before implementation:
+   - Define the outcome, users, current behavior, scope, non-goals, observable acceptance criteria, constraints, and consequential unknowns.
+   - Compare the contract with repository sources of truth and resolve conflicts under the Escalation Policy.
+   - Delegate bounded local research to `@explore` and external documentation or dependency research to `@scout`. Give each child one question, scope, required evidence, and stop condition.
+   - Keep raw research in child sessions. Require conclusions, evidence paths or URLs, and unresolved uncertainty rather than transcripts.
+   Eval Gate: the contract is complete enough to verify objectively; advance according to the selected oversight mode.
+2. **PLAN** — Select the smallest correct solution:
    - Confirm the problem needs a code change rather than documentation, configuration, an existing feature, or no action.
    - Reuse an existing project pattern, standard-library capability, native platform feature, or installed dependency before adding code or packages.
    - Record one selected approach and its decisive tradeoff. Mention alternatives only when they materially change cost, risk, behavior, or reversibility.
-   - Infer outcomes, non-goals, acceptance criteria, edge cases, security constraints, architectural boundaries, and canonical verification commands from the request and repository.
+   - Identify affected boundaries, risks, external effects, and canonical verification commands.
    - Escalate only under the policy above; otherwise state consequential assumptions and continue.
    - Choose Conductor Mode instead if the problem is exploratory, poorly understood, or requires continuous developer direction.
-   Give agents success criteria and constraints, not a prescribed implementation. Eval Gate: the contract is complete enough to verify objectively; advance according to the selected oversight mode.
-2. **BASELINE** — Dispatch @verifier to run the repository's canonical checks and report commands, exit statuses, and relevant output. Eval Gate: baseline passes, or failures are documented as clearly pre-existing and unrelated. Escalate only when classification is uncertain.
+   Eval Gate: one approach is selected with sufficient evidence to implement and verify it.
+3. **TASKS** — Produce ordered, bounded implementation tasks with dependencies and independently checkable outcomes where possible. Give agents success criteria and constraints, not a prescribed implementation. Parallelize only independent work; serialize dependencies and overlapping edits. Eval Gate: no implementation task depends on an unresolved specification or planning decision.
+4. **BASELINE** — Dispatch @verifier to run the repository's canonical checks and report commands, exit statuses, and relevant output. Eval Gate: baseline passes, or failures are documented as clearly pre-existing and unrelated. Escalate only when classification is uncertain.
 
 **STAGE 2 — Autonomous Implementation Loop**
-3. **IMPLEMENT (TDD MANDATORY)** — Dispatch @implementer with the selected outcome, acceptance criteria, guardrails, and baseline evidence. It builds the COMPLETE feature using strict TDD (Red/Green/Refactor) and relevant language skills. Eval Gate: targeted tests pass.
+5. **IMPLEMENT (TDD MANDATORY)** — Dispatch @implementer with the selected outcome, acceptance criteria, ordered tasks, guardrails, and baseline evidence. It builds the COMPLETE feature using strict TDD (Red/Green/Refactor) and relevant language skills. Eval Gate: targeted tests pass.
 
 **STAGE 3 — Verification & Evaluation Gates**
-4. **VERIFY** — Dispatch @verifier to run full formatting checks, lint, build, and tests and return command evidence. Eval Gate: passes clean. If FAIL, send the evidence to @implementer, then re-run VERIFY. Escalate after two correction loops without measurable progress.
-5. **EVALUATE** — Dispatch @reviewer with the requirement, diff, and VERIFY evidence to score task success, trajectory compliance, standards, security, assumptions, edge cases, integrations, dependencies, and error handling. Eval Gate: zero BLOCKs. If BLOCKs, send findings to @implementer, re-run VERIFY, then re-run EVALUATE. Escalate after two correction loops without measurable progress.
-6. **COMPLETE** — Present the verified output, command evidence, review verdict, consequential assumptions, and modified or created files. DO NOT COMMIT. In Always human review mode, wait for final approval. In Selective escalation mode, finish without requesting routine review. Recommend exactly one next path based on the result:
+6. **VERIFY** — Dispatch @verifier to run full formatting checks, lint, build, and tests and return command evidence. Eval Gate: passes clean. If FAIL, send the evidence to @implementer, then re-run VERIFY. Escalate after two correction loops without measurable progress.
+7. **EVALUATE** — Dispatch @reviewer with the requirement, diff, and VERIFY evidence to score task success, trajectory compliance, standards, security, assumptions, edge cases, integrations, dependencies, and error handling. Eval Gate: zero BLOCKs. If BLOCKs, send findings to @implementer, re-run VERIFY, then re-run EVALUATE. Escalate after two correction loops without measurable progress.
+8. **COMPLETE** — Present the verified output, command evidence, review verdict, consequential assumptions, and modified or created files. DO NOT COMMIT. In Always human review mode, wait for final approval. In Selective escalation mode, finish without requesting routine review. Recommend exactly one next path based on the result:
    - **Finish locally** when the user only requested working changes or wants to inspect them first.
    - **Single draft PR** when the diff is one cohesive, independently reviewable concern. Offer to commit and create it only after explicit user approval.
    - **`/delivery`** when the verified diff contains multiple separable concerns that would be safer or easier to review as stacked draft PRs.

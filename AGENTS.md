@@ -31,6 +31,16 @@ Before implementation, select the smallest correct solution. Research the codeba
 
 After verified output, recommend the smallest fitting next step: finish locally, create one draft PR for a cohesive change, or use `/delivery` only for multiple separable review units. Do not request routine human review; require explicit approval only before commits, pushes, PRs, or other externally visible actions.
 
+## Plan Mode And Delegation
+
+- Plan Mode is strictly read-only and guides the user through `Specify -> Plan -> Tasks`; it never implements.
+- Specify the outcome, users, current behavior, scope, non-goals, observable acceptance criteria, constraints, and consequential unknowns. Compare these with repository sources of truth.
+- Plan the smallest correct solution, affected boundaries, risks, verification, and external effects. Produce ordered, bounded tasks with dependencies and independently checkable outcomes where possible.
+- Ask only when ambiguity materially changes behavior, architecture, security, cost, or reversibility. Otherwise state consequential assumptions and continue.
+- Delegate bounded local research to `@explore` and external documentation or dependency research to `@scout`. Give each child one question, a scope, required evidence, and a stop condition.
+- Keep raw research in child sessions. Children return conclusions, evidence paths or URLs, and unresolved uncertainty, not transcripts.
+- Parallelize only independent work. Serialize dependencies and overlapping edits, and merge child results into one concise decision record.
+
 ## Execution Policy
 
 - Work on trusted local repositories may run on the host with scoped agent permissions.
@@ -46,6 +56,8 @@ After verified output, recommend the smallest fitting next step: finish locally,
 | `/tdd` | Apply strict Red/Green TDD to the requested work. |
 | `/next-pr` | Deliver the next pending item from `DELIVERY_PLAN.md`. |
 | `/review` | Run the read-only evaluation agent on current changes. |
+| `@explore` | Research a bounded local codebase question without editing. |
+| `@scout` | Research bounded external documentation or dependencies without editing. |
 | `@implementer` | Implement defined outcomes with TDD and no delivery permissions. |
 | `@verifier` | Run canonical checks and report deterministic evidence without editing. |
 | `@architect` | Decompose a verified feature into reviewable pull requests. |

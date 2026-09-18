@@ -10,6 +10,21 @@
     "prune": true
   },
 
+  "agent": {
+    "plan": {
+      "mode": "primary",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "task": {
+          "*": "deny",
+          "explore": "allow",
+          "scout": "allow"
+        }
+      }
+    }
+  },
+
   "permission": {
     "bash": {
       "git commit*": "ask",

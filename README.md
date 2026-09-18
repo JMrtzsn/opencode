@@ -26,6 +26,10 @@ The factory consists of:
 
 Real-time, hands-on steering for exploration, debugging, unfamiliar code, and work that needs continuous developer direction. No process gates. Follow the small universal policy in `AGENTS.md`; language guidance loads only when relevant.
 
+### Plan Mode
+
+Read-only guidance from a high-level request through `Specify → Plan → Tasks`. Plan Mode delegates bounded local research to `@explore` and external documentation or dependency research to `@scout`, keeping raw searches in child sessions and returning only conclusions, evidence references, and unresolved uncertainty. It asks only when ambiguity changes behavior, architecture, security, cost, or reversibility.
+
 ### Orchestrator Mode (`/orchestrator`)
 
 Delegated production work for well-defined outcomes that benefit from independent implementation, verification, and evaluation. At startup, choose selective escalation or human review at every gate; no skipping or reordering.
@@ -36,17 +40,17 @@ Delegated production work for well-defined outcomes that benefit from independen
 | **Always human review** | The orchestrator presents evidence and waits for explicit approval at every evaluation gate. |
 
 ```
-Solution selection and inferred contract → Baseline → Implementation
+Specify → Plan → Tasks → Baseline → Implementation
   → Verification → Evaluation → Verified output
 ```
 
 | Stage | Sub-steps | What happens |
 |---|---|---|
-| **1 — Intent Specification & Harness Configuration** | SOLUTION SELECTION, BASELINE | Research the problem, select the smallest correct approach, infer a verifiable contract, then `@verifier` records baseline evidence. Escalate only when missing information changes the outcome. |
+| **1 — Specification & Planning** | SPECIFY, PLAN, TASKS, BASELINE | Build a verifiable contract, select the smallest correct approach, produce bounded dependent tasks, then `@verifier` records baseline evidence. Bounded research runs in child sessions. |
 | **2 — Autonomous Implementation Loop** | IMPLEMENT | `@implementer` builds the complete feature using strict TDD and relevant skills. No production code without a failing test. |
 | **3 — Verification & Evaluation Gates** | VERIFY, EVALUATE, COMPLETE | `@verifier` runs canonical checks; `@reviewer` evaluates requirements, diff, evidence, security, and the difficult final 20%; failures loop back automatically and passing output completes. |
 
-The main agent is a pure orchestrator: it never writes code or runs builds directly. Implementation, verification, and evaluation are delegated to specialists with scoped permissions. Selective escalation is the recommended default; Always human review restores approval at every gate. After verification it recommends the smallest fitting next step.
+The main agent is a pure orchestrator: it never writes code or runs builds directly. Research, implementation, verification, and evaluation are delegated to specialists with scoped permissions. Parallel dispatch is limited to independent work; dependencies and overlapping edits remain serial. Selective escalation is the recommended default; Always human review restores approval at every gate. After verification it recommends the smallest fitting next step.
 
 ### Guided Solution Selection
 
@@ -55,6 +59,8 @@ Before implementation, OpenCode checks whether code is needed, searches for an e
 ### Delivery (`/delivery`)
 
 Delivery is deliberately separate from building the feature. Use it only when a verified diff contains multiple independently understandable and testable concerns. After approval, `/delivery` asks `@architect` to produce `DELIVERY_PLAN.md`; `/next-pr` then creates each approved draft PR. Cohesive changes should use one draft PR instead.
+
+`DELIVERY_PLAN.md` is post-implementation PR decomposition, not the implementation task plan produced before baseline and implementation.
 
 ### Guided Next Step
 
@@ -71,7 +77,7 @@ Delivery is deliberately separate from building the feature. Use it only when a 
 | Instructions and rules | Lean global `AGENTS.md`, project `AGENTS.md`, commands, agent prompts, and on-demand skills. |
 | Tools | OpenCode file, search, shell, web, task, skill, and GitHub tooling with global and per-agent permissions. |
 | Execution environment | Host execution is OpenCode's current runtime. The instruction policy requires stopping before executing unknown repositories; sandboxing is external and not automatically enforced. |
-| Orchestration | `/orchestrator` coordinates `@implementer`, `@verifier`, and `@reviewer`; `/delivery` invokes `@architect` after approval. |
+| Orchestration | Plan Mode and `/orchestrator` use `@explore` and `@scout` for bounded research; `/orchestrator` coordinates `@implementer`, `@verifier`, and `@reviewer`; `/delivery` invokes `@architect` after approval. |
 | Guardrails and hooks | OpenCode permissions and `plugins/guardrails.ts` enforce selected tool restrictions. Git hooks, CI, and branch protection are repository-owned external controls. |
 | Observability | OpenCode session logs, verifier command evidence, reviewer findings, Git history, and CI results. |
 
@@ -103,6 +109,8 @@ Test design remains with `@implementer`; generating useful tests requires unders
 | `agents/implementer.md` | TDD implementation agent. Can edit and run common development checks, but cannot commit or push. |
 | `agents/reviewer.md` | Subagent definition for `@reviewer`. Read-only evaluation agent. Reports PASS/FAIL with BLOCK/WARN findings. |
 | `agents/verifier.md` | Read-only verification agent. Runs canonical checks and reports command evidence without fixing failures. |
+| Built-in `plan` | Read-only primary agent for `Specify → Plan → Tasks`; may delegate only to `explore` and `scout`. |
+| Built-in `explore` and `scout` | Read-only child agents for bounded local and external research. |
 | `plugins/guardrails.ts` | Deterministically blocks credential access, destructive commands, force pushes, and hook bypasses before tool execution. |
 | `skills/go-engineering/SKILL.md` | Go engineering guidance loaded for Go tasks. |
 | `skills/typescript-engineering/SKILL.md` | TypeScript and React guidance loaded for relevant tasks. |
@@ -123,7 +131,9 @@ Test design remains with `@implementer`; generating useful tests requires unders
 - **No TODOs in code.** Resolve everything before completing a task.
 - **Standard library first.** Third-party dependencies require justification.
 - **Progressive disclosure.** Language-specific instructions load only for matching work.
-- **Context compaction.** OpenCode compacts full contexts automatically and prunes old tool output.
+- **Context isolation first.** Bounded research stays in child sessions and returns concise evidence summaries.
+- **Context compaction second.** OpenCode compacts full contexts automatically and prunes old tool output as fallback cleanup.
+- **Independent parallelism only.** Serialize dependencies and overlapping edits.
 
 ## Recommended Project Setup
 
