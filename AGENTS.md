@@ -33,7 +33,7 @@ After verified output, recommend the smallest fitting next step: finish locally,
 
 ## Plan Mode And Delegation
 
-- Plan Mode is strictly read-only and guides the user through `Specify -> Plan -> Tasks`; it never implements.
+- Plan Mode guides the user through `Specify -> Plan -> Tasks`; it may use shell commands for research but never edits or implements.
 - Specify the outcome, users, current behavior, scope, non-goals, observable acceptance criteria, constraints, and consequential unknowns. Compare these with repository sources of truth.
 - Plan the smallest correct solution, affected boundaries, risks, verification, and external effects. Produce ordered, bounded tasks with dependencies and independently checkable outcomes where possible.
 - Ask only when ambiguity materially changes behavior, architecture, security, cost, or reversibility. Otherwise state consequential assumptions and continue.

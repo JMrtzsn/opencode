@@ -15,7 +15,7 @@
       "mode": "primary",
       "permission": {
         "edit": "deny",
-        "bash": "deny",
+        "bash": "allow",
         "task": {
           "*": "deny",
           "explore": "allow",

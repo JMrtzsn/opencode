@@ -28,7 +28,7 @@ Real-time, hands-on steering for exploration, debugging, unfamiliar code, and wo
 
 ### Plan Mode
 
-Read-only guidance from a high-level request through `Specify → Plan → Tasks`. Plan Mode delegates bounded local research to `@explore` and external documentation or dependency research to `@scout`, keeping raw searches in child sessions and returning only conclusions, evidence references, and unresolved uncertainty. It asks only when ambiguity changes behavior, architecture, security, cost, or reversibility.
+Guidance from a high-level request through `Specify → Plan → Tasks`, with shell access for research but no file edits or implementation. Plan Mode delegates bounded local research to `@explore` and external documentation or dependency research to `@scout`, keeping raw searches in child sessions and returning only conclusions, evidence references, and unresolved uncertainty. It asks only when ambiguity changes behavior, architecture, security, cost, or reversibility.
 
 ### Orchestrator Mode (`/orchestrator`)
 
@@ -109,7 +109,7 @@ Test design remains with `@implementer`; generating useful tests requires unders
 | `agents/implementer.md` | TDD implementation agent. Can edit and run common development checks, but cannot commit or push. |
 | `agents/reviewer.md` | Subagent definition for `@reviewer`. Read-only evaluation agent. Reports PASS/FAIL with BLOCK/WARN findings. |
 | `agents/verifier.md` | Read-only verification agent. Runs canonical checks and reports command evidence without fixing failures. |
-| Built-in `plan` | Read-only primary agent for `Specify → Plan → Tasks`; may delegate only to `explore` and `scout`. |
+| Built-in `plan` | Non-editing primary agent for `Specify → Plan → Tasks`; may use shell research and delegate only to `explore` and `scout`. |
 | Built-in `explore` and `scout` | Read-only child agents for bounded local and external research. |
 | `plugins/guardrails.ts` | Deterministically blocks credential access, destructive commands, force pushes, and hook bypasses before tool execution. |
 | `skills/go-engineering/SKILL.md` | Go engineering guidance loaded for Go tasks. |
